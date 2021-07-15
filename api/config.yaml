@@ -1,0 +1,43 @@
+listen:
+  http: 127.0.0.1:8081
+  grpc: 127.0.0.1:8082
+
+identity:
+  msp_id: BANKTESTMSP
+  msp_path: /etc/hyperledger/peer/msp
+
+chaincode:
+    channel: platform.test.orlan.deals.orlantestmsp
+    chaincode: deal
+    enc_key: AX5rXnt8R+57bN+UkSUljL2OggkC9ey+yz1ydKCZkkU=
+
+sdk:
+  crypto:
+    options:
+      curve: P256
+      hash: SHA2-256
+      signatureAlgorithm: SHA256
+    type: ecdsa
+  discovery:
+    options:
+      channels:
+        - chaincodes:
+            - name: single
+              policy: AND('SIPMSP.member','S7MSP.member')
+              type: golang
+          description: ticketing channel
+          name: ticketing
+
+    type: local
+  msp:
+
+    - name: BANKTESTMSP
+      endorsers:
+        - host: bank-test.platform.b2bchain.tech:7051
+    - name: CLIENTMSP
+      endorsers:
+        - host: client.test.platform.b2bchain.tech:7051
+
+  orderer:
+    host: orderer.test.b2bchain.tech:7050
+    timeout: 5s

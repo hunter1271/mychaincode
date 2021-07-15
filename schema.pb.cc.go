@@ -37,7 +37,7 @@ type HelloServiceChaincode interface {
 // RegisterHelloServiceChaincode registers service methods as chaincode router handlers
 func RegisterHelloServiceChaincode(r *cckit_router.Group, cc HelloServiceChaincode) error {
 
-	r.Invoke(HelloServiceChaincode_SayHello,
+	r.Query(HelloServiceChaincode_SayHello,
 		func(ctx cckit_router.Context) (interface{}, error) {
 			if v, ok := ctx.Param().(interface{ Validate() error }); ok {
 				if err := v.Validate(); err != nil {
@@ -89,7 +89,7 @@ func (c *HelloServiceGateway) SayHello(ctx context.Context, in *HelloRequest) (*
 		}
 	}
 
-	if res, err := c.Gateway.Invoke(ctx, HelloServiceChaincode_SayHello, []interface{}{in}, &HelloResponse{}); err != nil {
+	if res, err := c.Gateway.Query(ctx, HelloServiceChaincode_SayHello, []interface{}{in}, &HelloResponse{}); err != nil {
 		return nil, err
 	} else {
 		return res.(*HelloResponse), nil

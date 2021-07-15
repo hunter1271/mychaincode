@@ -14,7 +14,33 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/say_hello": {
+      "get": {
+        "summary": "Hello world!",
+        "operationId": "SayHello",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/schemaHelloResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "greeting",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HelloService"
+        ]
+      }
+    }
+  },
   "definitions": {
     "schemaHelloResponse": {
       "type": "object",
