@@ -26,17 +26,9 @@ var (
 	}
 
 	sdkConfig = sdkconfig.Config{
-		Crypto: sdkconfig.CryptoConfig{
-			Type: "ecdsa",
-			Options: map[string]interface{}{
-				"curve":              "P256",
-				"hash":               "SHA2-256",
-				"signatureAlgorithm": "SHA256",
-			},
-		},
 		Orderers: []sdkconfig.ConnectionConfig{
 			{
-				Host: "127.0.0.1:7050",
+				Host: "0.0.0.0:7053",
 				Timeout: sdkconfig.Duration{
 					Duration: time.Second * 5,
 				},
@@ -44,13 +36,23 @@ var (
 		},
 		Discovery: sdkconfig.DiscoveryConfig{
 			Type: "local",
+			Options: map[string]interface{}{
+				"channels": map[string]interface{}{
+					"name": "mychannel",
+					"chaincodes": map[string]interface{}{
+						"name":   "greeting",
+						"type":   "golang",
+						"policy": "AND('Org1MSP.member','Org2MSP.member')",
+					},
+				},
+			},
 		},
 		MSP: []sdkconfig.MSPConfig{
 			{
 				Name: "Org1MSP",
 				Endorsers: []sdkconfig.ConnectionConfig{
 					{
-						Host: "localhost:7051",
+						Host: "0.0.0.0:7051",
 					},
 				},
 			},
@@ -58,14 +60,9 @@ var (
 				Name: "Org2MSP",
 				Endorsers: []sdkconfig.ConnectionConfig{
 					{
-						Host: "localhost:9051",
+						Host: "0.0.0.0:9051",
 					},
 				},
-			},
-		},
-		Pool: sdkconfig.PoolConfig{
-			DeliverTimeout: sdkconfig.Duration{
-				Duration: 0,
 			},
 		},
 	}
@@ -91,4 +88,5 @@ func main() {
 	}
 
 	fmt.Println(res.Reply)
+	fmt.Println("final")
 }
